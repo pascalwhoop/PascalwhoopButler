@@ -17,6 +17,8 @@ def add_json_summary(json_string: str):
     """
     summary = json.JSONDecoder().decode(json_string)
     summary = process_summary(summary)
+    if summary is None:
+        return
     _add_summary(summary)
 
 def process_summary(summary: dict):
@@ -26,21 +28,41 @@ def process_summary(summary: dict):
     :returns: TODO
 
     """
-    del summary['content']
-    summary['date_read'] = date.today().isoformat()
+    try:
+        del summary['content']
+        summary['date_read'] = date.today().isoformat()
+    except Exception as e:
+        LOGGER.error(e)
+        LOGGER.error(summary)
+        return None
     return summary
+
+
+
 
 def _add_summary(summary: dict):
     file_path = get_path_for_json()
     _ensure_file_exists(file_path)
-    with open(get_path_for_json(), encoding='utf-8') as json_target_file:
-        json_arr = json.load(json_target_file)
-        LOGGER.info("current number of articles is: {}".format(len(json_arr)))
-        json_arr.append(summary)
+    json_arr = get_json_summaries()
+    json_arr.insert(0, summary)
     with open(get_path_for_json(), mode='w', encoding='utf-8') as json_target_file:
         json_string = json.dumps(json_arr, ensure_ascii=False)
         json_target_file.write(json_string)
-    
+
+def is_already_parsed(url: str):
+    _ensure_file_exists(get_path_for_json())
+    arr = get_json_summaries()
+    url = url.split("?")[0]
+    matches = [a for a in arr if url in a['url']]
+    return len(matches) > 0
+
+def get_json_summaries():
+    with open(get_path_for_json(), encoding='utf-8') as json_target_file:
+        json_arr = json.load(json_target_file)
+        LOGGER.info("current number of articles is: {}".format(len(json_arr)))
+    return json_arr
+
+
 def get_path_for_json():
     """TODO: Docstring for get_path_for_json.
     :returns: TODO

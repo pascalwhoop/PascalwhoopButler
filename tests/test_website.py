@@ -30,6 +30,11 @@ class TestWebsite(unittest.TestCase):
             content = file.read()
             self.assertEqual('[{"foo": "bar"}]', content)
         os.remove('foo2.swp')
-        
+
+    def test_is_already_parsed(self):
+        parsed = website.is_already_parsed("https://en.wikipedia.org/wiki/Mediterranean_diet")
+        self.assertTrue(parsed)
+        parsed = website.is_already_parsed("https://en.notparsed.org/wiki/Mediterranean_diet")
+        self.assertFalse(parsed)
 
 
