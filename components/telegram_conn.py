@@ -1,10 +1,10 @@
-import logging
 import telegram as t
 import telegram.ext as ext
 import components.mercury as mercury
 import components.website as website
 
-log = logging.getLogger(__name__)
+import logging
+LOGGER = logging.getLogger(__name__)
 # setup the entities used
 bot = None
 updater = None
@@ -18,7 +18,7 @@ def init(_token: str):
     dispatcher = updater.dispatcher
 
     _register_handlers()
-    log.info(bot.get_me())
+    LOGGER.info(bot.get_me())
 
 def start_polling():
     """Starts polling the telegram api for messages
@@ -33,8 +33,10 @@ def start_handler(bot, update):
 
 def http_url_handler(bot, update):
     if not is_me(update):
+        LOGGER.error("NOT ME! {}".format(update.message.from_user.username))
         return
     text = update.message.text
+    LOGGER.info("parsing url {}".format(text))
     #TODO do some regex magic (remove spaces etc)
     summary = mercury.parse_url(text)
     website.add_json_summary(summary)

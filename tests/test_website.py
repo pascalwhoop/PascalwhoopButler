@@ -15,7 +15,7 @@ class TestWebsite(unittest.TestCase):
     def test_get_path_for_json(self):
         root_p = config.get_config()['website_root']
         pa = website.get_path_for_json()
-        self.assertEqual("{}/data/reading/2018.json".format(root_p), pa)
+        self.assertEqual("{}/_data/2018-reading.json".format(root_p), pa)
 
     def test_ensure_file_exists(self):
         website._ensure_file_exists('foo.swp')

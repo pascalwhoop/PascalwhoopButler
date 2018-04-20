@@ -1,8 +1,8 @@
-import logging
 from urllib import request, parse
 import components.config as config
 
-log = logging.getLogger(__name__)
+import logging
+LOGGER = logging.getLogger(__name__)
 url_template = "https://mercury.postlight.com/parser?url={}"
 
 
@@ -17,5 +17,7 @@ def parse_url(url: str):
     req = request.Request(req_url)
     req.add_header('x-api-key', config.get_config()['mercury'])
     req.add_header('Content-Type', 'application/json')
-    raw_content = request.urlopen(req).read()
+    response = request.urlopen(req)
+    raw_content = response.read()
+    LOGGER.info("mercury parsing complete for {}".format(url))
     return raw_content.decode('utf-8')
