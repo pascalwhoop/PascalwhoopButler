@@ -16,6 +16,7 @@ class MercuryResponse(object):
             direction       = None,
             total_pages     = None,
             rendered_pages  = None,
+            date_read       = None,
     ):
         self.title          = title
         self.content        = content
@@ -31,3 +32,4 @@ class MercuryResponse(object):
         self.direction      = direction
         self.total_pages    = total_pages
         self.rendered_pages = rendered_pages
+        self.date_read      = date_read
