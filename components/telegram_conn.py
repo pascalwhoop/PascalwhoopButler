@@ -42,7 +42,7 @@ def http_url_handler(bot, update):
     if summary is not None:
         website.add_json_summary(summary)
         #TODO call make_pdf
-        bot.send_message(chat_id=update.message.chat_id, text="URL parsed\nTitle: {}".format(summary.title))
+        bot.send_message(chat_id=update.message.chat_id, text="URL parsed\nTitle: {}".format(summary['title']))
     else:
         bot.send_message(chat_id=update.message.chat_id, text="failed to parse URL")
 
