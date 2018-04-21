@@ -39,7 +39,8 @@ def http_url_handler(bot, update):
     text = update.message.text
     LOGGER.info("parsing url {}".format(text))
     #TODO do some regex magic (remove spaces etc)
-    summary = mercury.parse_url(text)
+    url = get_url_from_message_text(text)
+    summary = mercury.parse_url(url)
     if summary is not None:
         website.add_json_summary(summary)
         #TODO call make_pdf
