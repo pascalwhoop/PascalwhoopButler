@@ -39,13 +39,22 @@ def http_url_handler(bot, update):
     LOGGER.info("parsing url {}".format(text))
     #TODO do some regex magic (remove spaces etc)
     summary = mercury.parse_url(text)
-    website.add_json_summary(summary)
+    if summary is not None:
+        website.add_json_summary(summary)
+        #TODO call make_pdf
+        bot.send_message(chat_id=update.message.chat_id, text="URL parsed\nTitle: {}".format(summary.title))
+    else:
+        bot.send_message(chat_id=update.message.chat_id, text="failed to parse URL")
 
-    #TODO call make_pdf
 
 def is_me(update):
     return update.message.from_user.username == 'pascalwhoop'
 
+#matching also when url is in later line
+url_regex = '((.|\n)*)(http[s]*:\/\/)'
 def _register_handlers():
     dispatcher.add_handler(ext.CommandHandler('start', start_handler))
-    dispatcher.add_handler(ext.RegexHandler('.*http[s]*:\/\/', http_url_handler))
+    #from the source code of the framework:
+    #match = re.match(self.pattern, update.effective_message.text)
+    #return bool(match)
+    dispatcher.add_handler(ext.RegexHandler(url_regex, http_url_handler))

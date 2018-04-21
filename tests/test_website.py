@@ -32,7 +32,7 @@ class TestWebsite(unittest.TestCase):
         os.remove('foo2.swp')
 
     def test_is_already_parsed(self):
-        parsed = website.is_already_parsed("https://en.wikipedia.org/wiki/Mediterranean_diet")
+        parsed = website.is_already_parsed("https://medium.com/@jhubbel/dont-move-here-we-don-t-want-you-566448c6e3ee")
         self.assertTrue(parsed)
         parsed = website.is_already_parsed("https://en.notparsed.org/wiki/Mediterranean_diet")
         self.assertFalse(parsed)
