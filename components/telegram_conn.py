@@ -48,4 +48,4 @@ def is_me(update):
 
 def _register_handlers():
     dispatcher.add_handler(ext.CommandHandler('start', start_handler))
-    dispatcher.add_handler(ext.RegexHandler('http[s]*:\/\/', http_url_handler))
+    dispatcher.add_handler(ext.RegexHandler('.*http[s]*:\/\/', http_url_handler))
