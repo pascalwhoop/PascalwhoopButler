@@ -8,14 +8,9 @@ web_root = config.get_config()['website_root']
 import logging
 LOGGER = logging.getLogger(__name__)
 
-def add_json_summary(json_string: str):
+def add_json_summary(summary):
     """takes a json summary from mercury and adds it to the websites list of read things
-
-    :json_string: str: TODO
-    :returns: TODO
-
     """
-    summary = json.JSONDecoder().decode(json_string)
     summary = process_summary(summary)
     if summary is None:
         return

@@ -1,5 +1,6 @@
 import logging
 from urllib import parse, request
+import json
 
 import time
 
@@ -34,7 +35,9 @@ def try_parse_url(url):
         response = request.urlopen(req)
         raw_content = response.read()
         LOGGER.info("mercury parsing complete for {}".format(url))
-        return raw_content.decode('utf-8')
+        json_string = raw_content.decode('utf-8')
+        summary = json.JSONDecoder().decode(json_string)
+        return summary
     except Exception as e:
         LOGGER.error(e)
         LOGGER.warning("might have reached a timeout. waiting a bit")

@@ -1,4 +1,5 @@
 import telegram as t
+import re
 import telegram.ext as ext
 import components.mercury as mercury
 import components.website as website
@@ -42,10 +43,16 @@ def http_url_handler(bot, update):
     if summary is not None:
         website.add_json_summary(summary)
         #TODO call make_pdf
+        #TODO not JSON --> parse first
         bot.send_message(chat_id=update.message.chat_id, text="URL parsed\nTitle: {}".format(summary['title']))
     else:
         bot.send_message(chat_id=update.message.chat_id, text="failed to parse URL")
 
+url_capture_regex = re.compile("(.|\n)*(http[s]*:\/\/[^\s]*)")
+def get_url_from_message_text(text: str):
+    """matches against a regex and returns the url from the message text
+    """
+    return url_capture_regex.match(text).group(2)
 
 def is_me(update):
     return update.message.from_user.username == 'pascalwhoop'

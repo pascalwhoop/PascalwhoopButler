@@ -23,6 +23,15 @@ class TestTelegram(unittest.TestCase):
         matches = regex.match("not-a-good-url.de")
         self.assertIsNone(matches)
 
+    def test_get_url_from_message_text(self):
+        message = """Der Planet steht, das System wankt: Der Klimawandel zeigt sich radikaler denn je
+        http://m.faz.net/aktuell/wissen/erde-klima/der-planet-steht-das-system-wankt-der-klimawandel-zeigt-sich-radikaler-denn-je-15545724.html"""
+
+        exptected = "http://m.faz.net/aktuell/wissen/erde-klima/der-planet-steht-das-system-wankt-der-klimawandel-zeigt-sich-radikaler-denn-je-15545724.html"
+        url = telegram_conn.get_url_from_message_text(message)
+        self.assertEqual(exptected, url)
+        
+        
 
 
         
