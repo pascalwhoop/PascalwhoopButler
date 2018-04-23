@@ -1,8 +1,7 @@
 import telegram as t
 import re
 import telegram.ext as ext
-import components.mercury as mercury
-import components.website as website
+from components import website, mercury, pdf_maker
 
 import logging
 LOGGER = logging.getLogger(__name__)
@@ -38,16 +37,19 @@ def http_url_handler(bot, update):
         return
     text = update.message.text
     LOGGER.info("parsing url {}".format(text))
-    #TODO do some regex magic (remove spaces etc)
     url = get_url_from_message_text(text)
-    summary = mercury.parse_url(url)
-    if summary is not None:
-        website.add_json_summary(summary)
-        #TODO call make_pdf
-        #TODO not JSON --> parse first
-        bot.send_message(chat_id=update.message.chat_id, text="URL parsed\nTitle: {}".format(summary['title']))
+    if url[-4:] == '.pdf':
+        handle_pdf_url(url)
+        bot.send_message(chat_id=update.message.chat_id, text="Parsing a pdf file directly")
     else:
-        bot.send_message(chat_id=update.message.chat_id, text="failed to parse URL")
+        summary = mercury.parse_url(url)
+        if summary is not None:
+            #TODO call make_pdf
+            pdf_maker.mercury_summary_to_pdf(summary)
+            website.add_json_summary(summary)
+            bot.send_message(chat_id=update.message.chat_id, text="URL parsed\nTitle: {}".format(summary['title']))
+        else:
+            bot.send_message(chat_id=update.message.chat_id, text="failed to parse URL")
 
 url_capture_regex = re.compile("(.|\n)*(http[s]*:\/\/[^\s]*)")
 def get_url_from_message_text(text: str):
@@ -57,6 +59,10 @@ def get_url_from_message_text(text: str):
 
 def is_me(update):
     return update.message.from_user.username == 'pascalwhoop'
+
+def handle_pdf_url(url):
+    #TODO 
+    pass
 
 #matching also when url is in later line
 url_regex = '((.|\n)*)(http[s]*:\/\/)'
