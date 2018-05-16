@@ -14,6 +14,9 @@ RUN cd pandoc-2.1.3 && \
 RUN cd /usr/bin && \
     ln -s /root/local/bin/pandoc pandoc && \
     rm -rf /root/.stack
+WORKDIR /
+RUN apt-get install -y --no-install-recommends cron
+RUN git clone https://github.com/pascalwhoop/pascalbrokmeier.de
 
 COPY ./docker_config.json ./config.json
 #starting the bot
