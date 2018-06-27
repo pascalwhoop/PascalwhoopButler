@@ -3,3 +3,4 @@ __pycache__/
 config.json
 docker_config.json
 config_pi.json
+python/config_docker.json

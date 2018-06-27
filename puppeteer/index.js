@@ -29,6 +29,10 @@ const argv = require('yargs')
     .argv
 
 const { url, out, delay, css, format, style, width, height, landscape } = argv
+urlClean = url.replace(/"/g, '').trim()
+outClean = out.replace(/"/g, '').trim()
+console.log("getting URL:")
+console.log(urlClean)
 
 const sleep = (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms))
@@ -43,7 +47,7 @@ const sleep = (ms) => {
     if (width && height) {
         await page.setViewport({ width, height })
     }
-    await page.goto(url)
+    await page.goto(urlClean)
     if (css || style) {
         await page.evaluate((css, style) => {
             if (css) {
@@ -61,11 +65,11 @@ const sleep = (ms) => {
     if (delay) {
         await sleep(delay)
     }
-    if (out === '-') {
+    if (outClean === '-') {
         const screenshot = await page.screenshot()
         console.log(screenshot.toString('base64'))
-    } else if (out.indexOf('pdf') >0 ){
-        await page.pdf({format: format, landscape: landscape, path:out, format:'A4',printBackground:true});
+    } else if (outClean.indexOf('pdf') >0 ){
+        await page.pdf({format: format, landscape: landscape, path:outClean, format:'A4',printBackground:true});
     }
     else {
         await page.screenshot({path: out})

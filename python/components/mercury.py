@@ -29,6 +29,7 @@ def parse_url(url: str):
 def try_parse_url(url):
     try:
         req_url = url_template.format(parse.quote_plus(url))
+        LOGGER.info("mercury outgoing request -- {}".format(req_url))
         req = request.Request(req_url)
         req.add_header('x-api-key', config.get_config()['mercury'])
         req.add_header('Content-Type', 'application/json')
