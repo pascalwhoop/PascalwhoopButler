@@ -45,7 +45,8 @@ def http_url_handler(bot, update):
         summary = mercury.parse_url(url)
         if summary is not None:
             #TODO call make_pdf
-            #pdf_maker.mercury_summary_to_pdf(summary)
+            pdf_maker.mercury_summary_to_pdf(summary)
+            pdf_maker.save_website(url, file_name)
             website.add_json_summary(summary)
             bot.send_message(chat_id=update.message.chat_id, text="URL parsed\nTitle: {}".format(summary['title']))
         else:
